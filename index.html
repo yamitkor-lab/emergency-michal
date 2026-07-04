@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מצב חירום</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;min-height:100%;background:#faf3e8;font-family:Arial,sans-serif;overflow:hidden}
+body{display:grid;place-items:center}
+.phone{position:relative;width:min(100vw,56.25vh);height:min(177.78vw,100vh);max-width:1080px;max-height:1920px;background:#faf3e8;overflow:hidden}
+.bg{width:100%;height:100%;display:block;object-fit:cover;user-select:none;pointer-events:none}
+.hotspot{position:absolute;border:0;background:rgba(255,255,255,0);cursor:pointer;border-radius:7%;transition:transform .15s ease,filter .15s ease}
+.hotspot:hover{transform:scale(1.025);filter:brightness(1.04)}
+.hotspot:active{transform:scale(.965)}
+.presentation{left:7.4%;top:37.1%;width:40.8%;height:24.2%}
+.video{left:51.7%;top:37.1%;width:40.8%;height:24.2%}
+.sheet{left:7.4%;top:64.2%;width:40.8%;height:24.2%}
+.job{left:51.7%;top:64.2%;width:40.8%;height:24.2%}
+.siren-pulse{position:absolute;left:74.5%;top:6.6%;width:14%;height:9%;border-radius:50%;animation:sirenPulse 1.8s infinite ease-in-out;pointer-events:none;mix-blend-mode:screen}
+@keyframes sirenPulse{0%,100%{box-shadow:0 0 0 rgba(255,0,0,0);opacity:.05}50%{box-shadow:0 0 28px rgba(255,30,30,.55);opacity:.35}}
+.heart-pulse{position:absolute;left:28.3%;top:90.9%;width:8%;height:6%;animation:heartBeat 2.2s infinite ease-in-out;pointer-events:none}
+@keyframes heartBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.08)}24%{transform:scale(1)}36%{transform:scale(1.06)}48%{transform:scale(1)}}
+.overlay{position:absolute;inset:0;display:none;place-items:center;background:rgba(255,248,238,.55);backdrop-filter:blur(2px);z-index:10}
+.overlay.show{display:grid}
+.modal{width:78%;direction:rtl;text-align:center;background:rgba(255,255,255,.94);border-radius:28px;padding:28px 22px;box-shadow:0 14px 35px rgba(30,35,60,.18);color:#09285a;font-weight:700;font-size:clamp(18px,5vw,32px);transform:scale(.94);animation:pop .25s ease forwards}
+.modal .icon{font-size:clamp(32px,9vw,64px);margin-bottom:10px;animation:miniPulse 1s infinite ease-in-out}
+.modal .small{margin-top:8px;font-size:clamp(14px,3.6vw,22px);font-weight:500;color:#3a4a63}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes miniPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+</style>
+</head>
+<body>
+<main class="phone" aria-label="מצב חירום">
+<img class="bg" src="background.png" alt="מצב חירום - כפתורי עזרה">
+<div class="siren-pulse"></div>
+<div class="heart-pulse"></div>
+<button class="hotspot presentation" aria-label="הכנת מצגת" data-message="🚨 זוהי הודעת חירום! חייבת מצגת בבקשה..."></button>
+<button class="hotspot video" aria-label="הכנת סרטון" data-message="🎬 זוהי הודעת חירום! אני צריכה צלמת ועורכת (בקיצור קולנועית)"></button>
+<button class="hotspot sheet" aria-label="הכנת גיליון נתונים" data-message="📊 זוהי הודעת חירום! צריכה את קסמי האקסל שלך..."></button>
+<button class="hotspot job" aria-label="בואי למשרה" data-message="💼 זוהי הודעת חירום! צריכה יותר מידי דברים, פשוט בואי למשרה!"></button>
+<div class="overlay" id="overlay"><div class="modal"><div class="icon">🚨</div><div id="statusText">מאתר את ימית...</div><div class="small" id="statusSub">פותח ערוץ תקשורת</div></div></div>
+</main>
+<script>
+const phoneNumber="972542224300";
+const overlay=document.getElementById("overlay");
+const statusText=document.getElementById("statusText");
+const statusSub=document.getElementById("statusSub");
+document.querySelectorAll(".hotspot").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const message=button.dataset.message;
+    overlay.classList.add("show");
+    statusText.textContent="מאתר את ימית...";
+    statusSub.textContent="פותח ערוץ תקשורת";
+    setTimeout(()=>{statusText.textContent="ימית נמצאה!";statusSub.textContent="מעביר לוואטסאפ...";},650);
+    setTimeout(()=>{window.location.href="https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(message);},1300);
+  });
+});
+</script>
+</body>
+</html>
