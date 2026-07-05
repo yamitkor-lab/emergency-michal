@@ -10,84 +10,18 @@ html,body{margin:0;width:100%;min-height:100%;background:#faf3e8;font-family:Ari
 body{display:grid;place-items:center}
 .phone{position:relative;width:min(100vw,56.25vh);height:min(177.78vw,100vh);max-width:1080px;max-height:1920px;background:#faf3e8;overflow:hidden}
 .bg{width:100%;height:100%;display:block;object-fit:cover;user-select:none;pointer-events:none}
-.hotspot{position:absolute;border:0;background:rgba(255,255,255,0);cursor:pointer;border-radius:7%;transition:transform .15s ease,filter .15s ease}
+.hotspot{position:absolute;border:0;background:rgba(255,255,255,0);cursor:pointer;border-radius:7%;transition:transform .16s ease,filter .16s ease}
 .hotspot:hover{transform:scale(1.025);filter:brightness(1.04)}
-.hotspot:active,.hotspot.clicked{transform:scale(.94);filter:brightness(1.08)}
+.hotspot:active,.hotspot.clicked{transform:scale(.91);filter:brightness(1.1)}
+.hotspot.clicked::after{content:"";position:absolute;inset:0;border-radius:7%;background:rgba(255,255,255,.20);box-shadow:0 0 0 8px rgba(255,255,255,.18);animation:buttonPop .38s ease-out}
+@keyframes buttonPop{0%{transform:scale(.96);opacity:.65}100%{transform:scale(1.08);opacity:0}}
 .presentation{left:7.4%;top:37.1%;width:40.8%;height:24.2%}
 .video{left:51.7%;top:37.1%;width:40.8%;height:24.2%}
 .sheet{left:7.4%;top:64.2%;width:40.8%;height:24.2%}
 .job{left:51.7%;top:64.2%;width:40.8%;height:24.2%}
-
-/* סירנה: שכבת אור ברורה מעל אזור הסירנה */
-.siren-pulse{
-  position:absolute;
-  left:76.2%;
-  top:6.3%;
-  width:13.5%;
-  height:8.8%;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:3;
-}
-.siren-pulse::before{
-  content:"";
-  position:absolute;
-  inset:-10%;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(255,30,30,.62) 0%, rgba(255,30,30,.35) 34%, rgba(255,30,30,0) 72%);
-  animation:sirenGlow 1.25s infinite ease-in-out;
-}
-.siren-pulse::after{
-  content:"";
-  position:absolute;
-  inset:16% 22%;
-  border-radius:50%;
-  background:rgba(255,255,255,.28);
-  animation:sirenBlink .8s infinite alternate ease-in-out;
-}
-@keyframes sirenGlow{
-  0%,100%{opacity:.12;transform:scale(.82)}
-  50%{opacity:.85;transform:scale(1.2)}
-}
-@keyframes sirenBlink{
-  from{opacity:.08}
-  to{opacity:.75}
-}
-
-/* לב: שכבת לב חצי שקופה מעל הלב שבתמונה */
-.heart-pulse{
-  position:absolute;
-  left:27.1%;
-  top:90.7%;
-  width:9.5%;
-  height:6.5%;
-  pointer-events:none;
-  z-index:3;
-  animation:heartBeat 1.6s infinite ease-in-out;
-}
-.heart-pulse::before{
-  content:"♡";
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#d84483;
-  font-size:clamp(38px,8vw,86px);
-  font-weight:900;
-  text-shadow:0 2px 10px rgba(216,68,131,.25);
-}
-@keyframes heartBeat{
-  0%,100%{transform:scale(1);opacity:.72}
-  20%{transform:scale(1.18);opacity:1}
-  36%{transform:scale(.98);opacity:.8}
-  52%{transform:scale(1.12);opacity:1}
-  70%{transform:scale(1);opacity:.75}
-}
-
-.overlay{position:absolute;inset:0;display:none;place-items:center;background:rgba(255,248,238,.55);backdrop-filter:blur(2px);z-index:10}
+.overlay{position:absolute;inset:0;display:none;place-items:center;background:rgba(255,248,238,.58);backdrop-filter:blur(2px);z-index:10}
 .overlay.show{display:grid}
-.modal{width:78%;direction:rtl;text-align:center;background:rgba(255,255,255,.94);border-radius:28px;padding:28px 22px;box-shadow:0 14px 35px rgba(30,35,60,.18);color:#09285a;font-weight:700;font-size:clamp(18px,5vw,32px);transform:scale(.94);animation:pop .25s ease forwards}
+.modal{width:78%;direction:rtl;text-align:center;background:rgba(255,255,255,.95);border-radius:28px;padding:28px 22px;box-shadow:0 14px 35px rgba(30,35,60,.18);color:#09285a;font-weight:700;font-size:clamp(18px,5vw,32px);transform:scale(.94);animation:pop .25s ease forwards}
 .modal .icon{font-size:clamp(32px,9vw,64px);margin-bottom:10px;animation:miniPulse 1s infinite ease-in-out}
 .modal .small{margin-top:8px;font-size:clamp(14px,3.6vw,22px);font-weight:500;color:#3a4a63}
 @keyframes pop{to{transform:scale(1)}}
@@ -97,42 +31,33 @@ body{display:grid;place-items:center}
 <body>
 <main class="phone" aria-label="מצב חירום">
 <img class="bg" src="background.png" alt="מצב חירום - כפתורי עזרה">
-<div class="siren-pulse"></div>
-
-<button class="hotspot presentation" aria-label="הכנת מצגת" data-message="🚨 זוהי הודעת חירום! חייבת מצגת בבקשה..."></button>
-<button class="hotspot video" aria-label="הכנת סרטון" data-message="🎬 זוהי הודעת חירום! אני צריכה צלמת ועורכת (בקיצור קולנועית)"></button>
-<button class="hotspot sheet" aria-label="הכנת גיליון נתונים" data-message="📊 זוהי הודעת חירום! צריכה את קסמי האקסל שלך..."></button>
-<button class="hotspot job" aria-label="בואי למשרה" data-message="💼 זוהי הודעת חירום! צריכה יותר מידי דברים, פשוט בואי למשרה!"></button>
-
+<button class="hotspot presentation" aria-label="הכנת מצגת" data-message="🖥️ זוהי הודעת חירום! חייבת מצגת בבקשה... ✨🙏"></button>
+<button class="hotspot video" aria-label="הכנת סרטון" data-message="🎬 זוהי הודעת חירום! אני צריכה צלמת ועורכת — בקיצור קולנוענית 😅🎥"></button>
+<button class="hotspot sheet" aria-label="הכנת גיליון נתונים" data-message="📊 זוהי הודעת חירום! צריכה את קסמי האקסל שלך... 🪄📈"></button>
+<button class="hotspot job" aria-label="בואי למשרה" data-message="🚨 זוהי הודעת חירום! צריכה יותר מדי דברים... פשוט בואי למשרה! ❤️😄"></button>
 <div class="overlay" id="overlay"><div class="modal"><div class="icon">🚨</div><div id="statusText">מאתר את ימית...</div><div class="small" id="statusSub">פותח ערוץ תקשורת</div></div></div>
 </main>
-
 <script>
 const phoneNumber="972542224300";
 const overlay=document.getElementById("overlay");
 const statusText=document.getElementById("statusText");
 const statusSub=document.getElementById("statusSub");
-
 function resetPage(){
   overlay.classList.remove("show");
-  document.querySelectorAll(".hotspot").forEach(b=>b.classList.remove("clicked"));
+  document.querySelectorAll(".hotspot").forEach(button=>button.classList.remove("clicked"));
   statusText.textContent="מאתר את ימית...";
   statusSub.textContent="פותח ערוץ תקשורת";
 }
-
-window.addEventListener("pageshow", resetPage);
-document.addEventListener("visibilitychange", ()=>{
-  if(!document.hidden) resetPage();
-});
-
+window.addEventListener("pageshow",resetPage);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)resetPage();});
 document.querySelectorAll(".hotspot").forEach(button=>{
   button.addEventListener("click",()=>{
     const message=button.dataset.message;
+    document.querySelectorAll(".hotspot").forEach(b=>b.classList.remove("clicked"));
     button.classList.add("clicked");
     overlay.classList.add("show");
     statusText.textContent="מאתר את ימית...";
     statusSub.textContent="פותח ערוץ תקשורת";
-
     setTimeout(()=>{statusText.textContent="ימית נמצאה!";statusSub.textContent="מעביר לוואטסאפ...";},1400);
     setTimeout(()=>{window.location.href="https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(message);},2800);
   });
