@@ -13,7 +13,7 @@ body{display:grid;place-items:center}
 .hotspot{position:absolute;border:0;background:rgba(255,255,255,0);cursor:pointer;border-radius:7%;transition:transform .16s ease,filter .16s ease}
 .hotspot:hover{transform:scale(1.025);filter:brightness(1.04)}
 .hotspot:active,.hotspot.clicked{transform:scale(.91);filter:brightness(1.1)}
-.hotspot.clicked::after{content:"";position:absolute;inset:0;border-radius:7%;background:rgba(255,255,255,.20);box-shadow:0 0 0 8px rgba(255,255,255,.18);animation:buttonPop .38s ease-out}
+.hotspot.clicked::after{content:"";position:absolute;inset:0;border-radius:7%;background:rgba(255,255,255,.22);box-shadow:0 0 0 8px rgba(255,255,255,.18);animation:buttonPop .38s ease-out}
 @keyframes buttonPop{0%{transform:scale(.96);opacity:.65}100%{transform:scale(1.08);opacity:0}}
 .presentation{left:7.4%;top:37.1%;width:40.8%;height:24.2%}
 .video{left:51.7%;top:37.1%;width:40.8%;height:24.2%}
@@ -31,37 +31,53 @@ body{display:grid;place-items:center}
 <body>
 <main class="phone" aria-label="מצב חירום">
 <img class="bg" src="background.png" alt="מצב חירום - כפתורי עזרה">
-<button class="hotspot presentation" aria-label="הכנת מצגת" data-message="🖥️ זוהי הודעת חירום! חייבת מצגת בבקשה... ✨🙏"></button>
-<button class="hotspot video" aria-label="הכנת סרטון" data-message="🎬 זוהי הודעת חירום! אני צריכה צלמת ועורכת — בקיצור קולנוענית 😅🎥"></button>
-<button class="hotspot sheet" aria-label="הכנת גיליון נתונים" data-message="📊 זוהי הודעת חירום! צריכה את קסמי האקסל שלך... 🪄"></button>
-<button class="hotspot job" aria-label="בואי למשרה" data-message="🚨 זוהי הודעת חירום! צריכה יותר מדי דברים... פשוט בואי למשרה! ❤️😄"></button>
-<div class="overlay" id="overlay"><div class="modal"><div class="icon">🚨</div><div id="statusText">מאתר את ימית...</div><div class="small" id="statusSub">פותח ערוץ תקשורת</div></div></div>
+<button class="hotspot presentation" aria-label="הכנת מצגת" data-type="presentation"></button>
+<button class="hotspot video" aria-label="הכנת סרטון" data-type="video"></button>
+<button class="hotspot sheet" aria-label="הכנת גיליון נתונים" data-type="sheet"></button>
+<button class="hotspot job" aria-label="בואי למשרה" data-type="job"></button>
+<div class="overlay" id="overlay"><div class="modal"><div class="icon" id="modalIcon"></div><div id="statusText">מאתר את ימית...</div><div class="small" id="statusSub">פותח ערוץ תקשורת</div></div></div>
 </main>
 <script>
 const phoneNumber="972542224300";
+const E={
+pc:String.fromCodePoint(0x1F5A5,0xFE0F),sparkle:String.fromCodePoint(0x2728),pray:String.fromCodePoint(0x1F64F),
+movie:String.fromCodePoint(0x1F3AC),camera:String.fromCodePoint(0x1F3A5),smile:String.fromCodePoint(0x1F605),
+chart:String.fromCodePoint(0x1F4CA),magic:String.fromCodePoint(0x1FA84),graph:String.fromCodePoint(0x1F4C8),
+siren:String.fromCodePoint(0x1F6A8),heart:String.fromCodePoint(0x2764,0xFE0F),grin:String.fromCodePoint(0x1F604)
+};
+const messages={
+presentation:E.pc+" זוהי הודעת חירום! חייבת מצגת בבקשה... "+E.sparkle+E.pray,
+video:E.movie+" זוהי הודעת חירום! אני צריכה צלמת ועורכת — בקיצור קולנוענית "+E.smile+E.camera,
+sheet:E.chart+" זוהי הודעת חירום! צריכה את קסמי האקסל שלך... "+E.magic+E.graph,
+job:E.siren+" זוהי הודעת חירום! צריכה יותר מדי דברים... פשוט בואי למשרה! "+E.heart+E.grin
+};
 const overlay=document.getElementById("overlay");
 const statusText=document.getElementById("statusText");
 const statusSub=document.getElementById("statusSub");
+const modalIcon=document.getElementById("modalIcon");
 function resetPage(){
-  overlay.classList.remove("show");
-  document.querySelectorAll(".hotspot").forEach(button=>button.classList.remove("clicked"));
-  statusText.textContent="מאתר את ימית...";
-  statusSub.textContent="פותח ערוץ תקשורת";
+overlay.classList.remove("show");
+document.querySelectorAll(".hotspot").forEach(b=>b.classList.remove("clicked"));
+modalIcon.textContent=E.siren;
+statusText.textContent="מאתר את ימית...";
+statusSub.textContent="פותח ערוץ תקשורת";
 }
 window.addEventListener("pageshow",resetPage);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)resetPage();});
 document.querySelectorAll(".hotspot").forEach(button=>{
-  button.addEventListener("click",()=>{
-    const message=button.dataset.message;
-    document.querySelectorAll(".hotspot").forEach(b=>b.classList.remove("clicked"));
-    button.classList.add("clicked");
-    overlay.classList.add("show");
-    statusText.textContent="מאתר את ימית...";
-    statusSub.textContent="פותח ערוץ תקשורת";
-    setTimeout(()=>{statusText.textContent="ימית נמצאה!";statusSub.textContent="מעביר לוואטסאפ...";},1400);
-    setTimeout(()=>{window.location.href="https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(message);},2800);
-  });
+button.addEventListener("click",()=>{
+const message=messages[button.dataset.type];
+document.querySelectorAll(".hotspot").forEach(b=>b.classList.remove("clicked"));
+button.classList.add("clicked");
+overlay.classList.add("show");
+modalIcon.textContent=E.siren;
+statusText.textContent="מאתר את ימית...";
+statusSub.textContent="פותח ערוץ תקשורת";
+setTimeout(()=>{statusText.textContent="ימית נמצאה!";statusSub.textContent="מעביר לוואטסאפ...";},1400);
+setTimeout(()=>{window.location.href="https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(message);},2800);
 });
+});
+resetPage();
 </script>
 </body>
 </html>
